@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.surveybot</groupId>
+    <artifactId>telegram-survey-bot</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Telegram Survey Bot</name>
+    <description>מערכת ניהול סקרי קהילה עם בוט טלגרם וממשק Swing</description>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--
+            הפרויקט הזה במכוון לא מצהיר על אף תלות (dependency) חיצונית.
+            כל מה שנדרש — כולל טיפול ב-JSON וקריאות HTTP — ממומש בעזרת
+            java.net.http.HttpClient (חלק מ-JDK 11+) וקוד JSON פנימי
+            (com.surveybot.services.SimpleJson). זה מבטיח build עקבי
+            שלא תלוי בגישה ל-Maven Central, ולא ייכשל בגלל חסימת רשת
+            או פרוקסי ארגוני.
+        -->
+    </properties>
+
+    <build>
+        <finalName>survey-bot</finalName>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <!--
+                maven-jar-plugin מייצר JAR רגיל עם Main-Class ב-manifest.
+                מכיוון שאין תלויות חיצוניות בכלל, אין צורך ב-shade/assembly
+                plugin לאיחוד dependencies לתוך ה-JAR — ה-JAR הרגיל כבר
+                עצמאי ("fat jar" מובנה מאליו, כי אין מה לארוז חוץ מהקוד שלנו).
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.surveybot.Application</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
